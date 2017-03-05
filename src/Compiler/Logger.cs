@@ -30,13 +30,15 @@ namespace Atomix
 
             if (!aDoLog)
                 return;
+            
+            if (string.IsNullOrEmpty(aPath)
+                throw new System.ArgumentNullException();  // Or default to a specific path?
 
             Script = new ArrayList();
             Message = new ArrayList();
             Details = new ArrayList();
             LoggerPath = Path.Combine(Path.GetDirectoryName(aPath), Path.GetFileName(aPath) + Helper.LoggerFile);
-            Timer = new Stopwatch();
-            Timer.Start();
+            Timer = Stopwatch.StartNew();
         }
 
         public void Write(string aScript, string aMessage, string aDetail)
@@ -53,10 +55,8 @@ namespace Atomix
         {
             if (!IsLogging)
                 return;
-            if (aSub)
-                Details[Details.Count - 1] = string.Format("{0}<li>{1}</li>", Details[Details.Count - 1], aAppend);
-            else
-                Details[Details.Count - 1] = string.Format("{0}<br>{1}", Details[Details.Count - 1], aAppend);
+            
+            Details[Details.Count - 1] = string.Format(aSub ? "{0}<li>{1}</li>" : "{0}<br>{1}", Details[Details.Count - 1], aAppend);
         }
 
         public void Dump()
